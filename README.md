@@ -1,26 +1,21 @@
-# 🧑‍🤝‍🧑 Microservicio de Usuarios - Club Deportivo
+## Descripción de la Actividad
+Este repositorio contiene el desarrollo de la actividad práctica enfocada en expandir la arquitectura de microservicios de nuestro sistema del "Club Deportivo". 
 
-Este repositorio contiene la implementación correspondiente al **Taller: Actividad Práctica - Nuevo Microservicio de Usuarios**. El objetivo de esta actividad es expandir la arquitectura del sistema del "Club Deportivo" agregando la gestión de clientes (usuarios) e integrándola con el API Gateway existente.
+Hasta el momento, el sistema contaba con los servicios independientes de **Canchas** y **Reservas**. Sin embargo, teníamos una limitación importante: no teníamos cómo saber o registrar quién era la persona que estaba realizando la reserva. 
 
-## 🎯 Objetivos Cumplidos (Requerimientos del Taller)
+El objetivo principal de este taller fue resolver ese problema construyendo desde cero un nuevo **Microservicio de Usuarios** para gestionar la información de los clientes, y lograr que se comunique con el resto de nuestra arquitectura.
 
-Se ha completado el flujo completo de desarrollo Backend solicitado en la rúbrica:
+## ¿Qué se implementó?
+Para cumplir con los requerimientos de la actividad, se desarrolló lo siguiente:
 
-1. **Paso 1 - Configuración Inicial:** Creación del proyecto Spring Boot (Java 21) con dependencias Web, JPA y conector MySQL. Se configuró la conexión a la base de datos independiente `club_usuarios`.
-2. **Paso 2 - Modelo de Datos:** Creación de la Entidad `Usuario` con los atributos solicitados: `id` (autoincrementable), `nombre`, `email` y `telefono`.
-3. **Paso 3 - Capa de Lógica y Datos:** Implementación de `UsuarioRepository` (extendiéndolo de JpaRepository) y la creación de la interfaz `UsuarioService` junto con su implementación `UsuarioServiceImpl`, inyectando correctamente el repositorio.
-4. **Paso 4 - Capa de Exposición (Controlador):** Implementación de `UsuarioController` mapeado en la ruta base `/api/users` con los endpoints correspondientes.
-5. **Paso 5 - API Gateway:** Registro exitoso del microservicio (Puerto `8083`) en el proyecto central de API Gateway (Puerto `9090`).
+* **Nuevo Microservicio:** Se creó un proyecto independiente en Spring Boot conectado a su propia base de datos MySQL (`club_deportivo3`), manteniendo el aislamiento de los datos.
+* **Desarrollo del CRUD:** Se implementó el modelo `Usuario` (id, nombre, email, teléfono), junto con su flujo completo: Repositorio (JPA), capa de Servicio y Controlador.
+* **Integración con API Gateway:** Este fue el paso clave de la actividad. El servicio de usuarios (puerto 8083) se registró en el API Gateway existente. De esta forma, el cliente final no necesita saber los puertos internos, sino que hace todas las peticiones al puerto central (9090).
 
-## 🔌 Endpoints Implementados
+## Rutas para probar en Postman (vía API Gateway)
+Todas las pruebas de integración se realizan apuntando al `localhost:9090` / `http://localhost:9090/api/usuarios`:
 
-El microservicio expone las siguientes operaciones REST, las cuales deben ser consumidas preferentemente a través del **API Gateway (Puerto 9090)** para respetar la arquitectura del sistema:
-
-| Petición | Ruta | Descripción |
-| :--- | :--- | :--- |
-| **GET** | `/api/usuarios` | Listar todos los usuarios registrados. |
-| **GET** | `/api/usuarios/{id}` | Obtener el detalle de un usuario específico por medio de su ID. |
-| **POST** | `/api/usuarios` | Crear y registrar un nuevo usuario en la base de datos. |
-| **DELETE** | `/api/usuarios/{id}` | Eliminar un usuario del sistema mediante su ID. |
-
----
+* `GET /api/usuarios` -> Obtiene la lista completa de usuarios.
+* `GET /api/usuarios/{id}` -> Busca un usuario específico por su ID.
+* `POST /api/usuarios` -> Permite registrar un nuevo usuario (enviando nombre, email y teléfono en formato JSON).
+* `DELETE /api/usuarios/{id}` -> Elimina un usuario del registro.
